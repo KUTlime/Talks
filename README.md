@@ -8,4 +8,4 @@
 
 ## [CZ] Amenit Days 2020 | PowerShell Core
 
-[Lecture notes](.\2020-AmenitDays\amenit-days-2020.md)
+[Lecture notes](./2020-AmenitDays/amenit-days-2020.md)
