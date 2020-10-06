@@ -39,6 +39,7 @@ Get-Module -ListAvailable
 Get-Command * | Measure-Object # pro porovnání obou verzí
 ####################################################
 
+
 ####################################################
 # Co je Powershell?
 ####################################################
@@ -74,7 +75,7 @@ To jsme si řekli A, teď si ještě říci B...
 
 
 ####################################################
-# Windows PowerShell vs. PowerShell Core
+# Windows PowerShell vs. PowerShell (Core)
 ####################################################
 # V čem je hlavní rozdíl?
 <#
@@ -133,9 +134,8 @@ Start-Process -FilePath 'https://www.psconf.eu/' # Pěkná akce
 ####################################################
 <#
 PowerShell Core sleduje stejnou praxi jako .NET Core.
-Existují Long-Term-Support (LTS) verze, které mají
-3 roky podporu.
-Verze 7.0.x byla první LTS verzí pro PowerShell Core.
+Existují Long-Term-Support (LTS) verze, které mají 3 roky podporu.
+Verze 7.0.x byla první LTS verzí pro PowerShell.
 #>
 Start-Process -FilePath 'https://docs.microsoft.com/en-us/lifecycle/policies/modern'
 Start-Process -FilePath 'https://docs.microsoft.com/en-us/powershell/scripting/powershell-support-lifecycle?view=powershell-7'
@@ -170,15 +170,17 @@ Před vznikem Windows PowerShellu si asi někdo řekl:
 "In your face, Linux!"
 A pak si asi řekli:
 "Jsou to taky lidi, pojďme jim pomoci. Uděláme to i pro Linux."
+
 Windows PowerShell  => Postaven na .NET Framework
 PowerShell Core     => Postaven na .NET Core
+PowerShell          ´> Postaven na .NET (5, 6,...)
 
 CMD && UNIX => textový vstup | výstup
 PS => Objektový vstup | výstup
 
 Jelikož PS úzce spoléhá na .NET, je postaven objektově.
 Klíčový je koncept roury, která umožňuje snadné zřetězení programů.
-Tento koncept zůstal zachován i v PowerShell Core.
+Tento koncept zůstal zachován i v nové verzi PS.
 #>
 ####################################################
 
