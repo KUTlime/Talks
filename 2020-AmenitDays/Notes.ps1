@@ -27,8 +27,8 @@ Start-Process -FilePath 'www.radekzahradnik.cz/bio'
   Když se to neumí zřetězit, je to PowerScript, ne PowerShell.
 - Proměnné se uvazují znakem $.
 - WPS => Windows PowerShell
-- PSC => PowerShell Core => PowerShell 6.x
-- PS => PowerShell => PowerShell (Core) 7.x a vyšší
+- PSC => PowerShell Core => PowerShell 6.x.x
+- PS => PowerShell => PowerShell (Core) 7.x.x a vyšší
 #>
 # PS v1.0 .. v5.1 => 10 let
 # PS v1.0 obsahoval cca 120 cmdletů.
@@ -81,13 +81,14 @@ To jsme si řekli A, teď si ještě říci B...
 <#
 Windows PowerShell  => Windows only
 PowerShell Core     => Multiplatformní (Windows, Linux, MacOS, ARM)
-PSC není náhrada za WPS !!! (zatím)
+PSC není náhrada za WPS !!!
+PS už může být pokládán za náhradu za WPS !!!
 #>
 
 # Jak poznám, jaký PowerShell mám?
 <#
-# Windows PowerShell se verzoval od 1.x do 5.1.x
-# PowerShell Core se verzuje od 6.x
+# Windows PowerShell se verzoval od 1.x do 5.1.x | Desktop
+# PowerShell Core se verzuje od 6.x | Core
 #>
 $PSVersionTable.PSVersion  # Zabudovaná proměnné, pouze od 5.x
 $PSVersionTable.PSVersion.Major # Cokoliv většího než 5 je Core  # Zabudovaná proměnné
@@ -201,10 +202,10 @@ $env:POWERSHELL_DISTRIBUTION_CHANNEL # Telemetrická proměnná pro distribučn�
 ## Jedná se o změnu chování ToString() metody, která nevypisuje tolik informací.
 Start-Process -FilePath powershell -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'Some error'}" -NoNewWindow
 Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'asdf'}" -NoNewWindow
-Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'asdf';Get-Error}" -NoNewWindow
+Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'asdf'; Get-Error}" -NoNewWindow
 
 $ErrorView = 'NormalView' # Starý způsob alá WPS5
-$ErrorView = 'ConciseView' # Nový způsob alá PSC
+$ErrorView = 'ConciseView' # Nový způsob alá PS
 
 # Nová složka v dokumentech
 Invoke-Item "$env:USERPROFILE\onedrive\Dokumenty\PowerShell"
