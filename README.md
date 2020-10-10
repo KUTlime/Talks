@@ -9,3 +9,11 @@
 ## [CZ] Amenit Days 2020 | PowerShell Core
 
 [Content](./2020-AmenitDays/amenit-days-2020.md)
+
+## [CZ] WUG Days 2020 | Instalace software v roce 2020
+
+[Content](./2020-WugDays/instalace-software-2020.md)
+
+## [CZ] WUG Days 2020 | Kam kráčí PowerShell
+
+[Content](./2020-WugDays/kam-kraci-powershell-2020.md)
