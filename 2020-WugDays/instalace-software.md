@@ -2,6 +2,8 @@
 
 > Přednáška na konferenci WUG Day 2020, Brno, přednášeno online ze záznamu.
 
+[Lecture notes](./Instalace-Software.ps1)
+
 ## Obsah
 
 * Historie instalací software pro Windows
