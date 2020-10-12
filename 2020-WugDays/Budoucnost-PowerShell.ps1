@@ -10,6 +10,7 @@
 # Představení přednášejícího
 ####################################################
 # .NET programátor
+# IT konzultant
 # Lektor
 # Nadšenec PowerShellu
 Start-Process -FilePath 'www.radekzahradnik.cz/bio'
@@ -84,10 +85,11 @@ v7.0.3 LTS 	| Červenec  2020 	| PowerShell    		| .NET Core 3.1
 v7.1.0 RC1	| Září  	2020 	| PowerShell    		| .NET 5.0-RC1
 #>
 
-# PS v1.0 .. v5.1 => 10 let
-# PS v1.0 obsahoval cca 120 cmdletů.
-# PS v2.0 obsahoval cca 240 cmdletů.
-# PS v5.1 obsahuje...
+# WPS v1.0 .. v5.1 => 10 let
+# WPS v1.0 obsahoval cca 120 cmdletů.
+# WPS v2.0 obsahoval cca 240 cmdletů.
+# WPS v5.1 obsahuje cca 1540 cmdletů v základů
+# PS obsahuje...
 Write-Host ("Total number of commands: " + (Get-Command).Count)
 Get-Module -ListAvailable
 Get-Command * | Measure-Object # pro porovnání obou verzí
