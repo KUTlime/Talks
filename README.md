@@ -12,8 +12,8 @@
 
 ## [CZ] WUG Days 2020 | Instalace software v roce 2020
 
-[Content](./2020-WugDays/instalace-software-2020.md)
+[Content](./2020-WugDays/instalace-software.md)
 
 ## [CZ] WUG Days 2020 | Kam kráčí PowerShell
 
-[Content](./2020-WugDays/kam-kraci-powershell-2020.md)
+[Content](./2020-WugDays/kam-kraci-powershell.md)
