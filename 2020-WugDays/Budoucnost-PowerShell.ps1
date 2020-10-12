@@ -381,13 +381,42 @@ if ([ExperimentalFeature]::IsEnabled("PSNullConditionalOperators"))
     ${Service}?.status
 }
 
+## Operátory zřetězení
+### Logické NEBO
+Get-Process calc -ErrorAction SilentlyContinue || "You have to run Calculator first" # Provede se pravá strana operátoru
+Get-Process calc -ErrorAction SilentlyContinue || calc                               # Provede se levá strana operátoru
+
+### Logické A
+calc && Get-Process calc                   # Vykonají se obě strany operátoru
+calcTypoInProcessName && Get-Process calc  # Vykoná se pouze levá strana operátoru
+
 # mnoho jiných experimentálních fíčur
 Start-Process -FilePath "https://docs.microsoft.com/en-us/powershell/scripting/learn/experimental-features?view=powershell-7.1"
+
+# 7.1.x
+## Vesměs low-level věci
+## PowerShellGet v3 (kompletně přepsaný z PS do C#)
+## Secret Management Module (správa hesel pro PS)
+## PSScriptAnalyzer v2.0 (vylepšení toolingu okolo VS Core)
+## Vylepšení aktualizace PowerShellu
 
 # Mimo soutěž - Windows Terminal
 wt
 ####################################################
 
+
+####################################################
+# Kdy PS nahradí WPS ve Windows nebo bude součástí instalace Windows?
+####################################################
+<#
+První se určitě nestane v dohledné době,
+druhé v blízké budoucnosti také ne. Microsoft otevřeně říká,
+že plány pro instalaci PS do Windows 10 zatím nemá a určitě se
+to nestane se 7.0.x jakožto LTS, určitě ne s 7.1.x jakožto
+ne-LTS verze, takže pokud, bude to spíše příští nebo přespříští
+LTS verze. Smysl dává konec roku 2021 po .NET 6.
+#>
+####################################################
 
 ####################################################
 # Jak zajistit běh v PSC?
