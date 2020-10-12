@@ -97,7 +97,7 @@ MSIX je:
 MSIX není:
 - Balíčkovací systém
 
-MSI podporuje:
+MSIX podporuje:
 - Automatizovanou instalaci
 - Přidání/odebrání/opravu/úpravu instalace
 - Pouze Win10 1709 a výše
@@ -184,6 +184,7 @@ Záleží na balíčku, je dobré si přečíst dokumentaci k balíčku. #RTFM
 <#
 Ninite je:
 - One-click instalátor populárního software
+- GUI aplikace
 - Obsahuje vyšší desítky software k dispozici
 - Částečně zastaralé verze balíčků
  #>
