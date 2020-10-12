@@ -149,7 +149,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 Write-Host "Installing VS Code..."
 Start-Process powershell { choco upgrade vscode -y } -Wait
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-Start-Process powershell { code --install-extension --install-extension ms-vscode.powershell } -Wait
+Start-Process powershell { code --install-extension ms-vscode.powershell } -Wait
 Start-Process code
 Write-Host "VS Code installed and prepared for PowerShell experience."
 
