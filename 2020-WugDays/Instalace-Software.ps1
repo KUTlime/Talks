@@ -10,9 +10,28 @@
 # Představení přednášejícího
 ####################################################
 # .NET programátor
+# IT konzultant
 # Lektor
 # Nadšenec PowerShellu
 Start-Process -FilePath 'www.radekzahradnik.cz/bio'
+####################################################
+
+
+####################################################
+# Pro začátek...
+####################################################
+<#
+- Příkazy PowerShellu se nazývají cmdlety nebo funkce, není to to samé a je vhodné to rozlišovat.
+- PowerShell se rozšiřuje do šířky pomocí modulů.
+- PowerShell se rozšiřuje do hloubky pomocí nové jazykové syntaxe a jiných fíčur.
+- PowerShell NeNí CaseSensitive.
+- Znak | není svislítko, ale roura, alias pipeline, alias operátor zřetězení.
+- Proměnné se uvazují znakem $.
+- WPS => Windows PowerShell verze 5.1.x
+- PSC => PowerShell Core => PowerShell 6.x.x
+- PS => PowerShell => PowerShell (Core) 7.x.x a vyšší
+
+#>
 ####################################################
 
 
