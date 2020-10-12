@@ -345,6 +345,10 @@ Start-Process -FilePath "https://4sysops.com/archives/enable-powershell-core-6-r
 
 # Syntaktické změny
 
+## Přepínač Parallel pro ForEach-Object
+(Measure-Command {1..10 | ForEach-Object {Start-Sleep -Seconds 1}}).TotalSeconds
+(Measure-Command {1..10 | ForEach-Object -Parallel {Start-Sleep -Seconds 1}}).TotalSeconds
+
 ## Ternární operátor
 if ($psEditor -eq 'Core')
 {
@@ -372,15 +376,6 @@ $filePath
 $file ??= "$env:TEMP\PSC.log"      # Pokud proměnná neexistuje, operátor ?? opět nahradí $null.
 $file
 
-## Podmíněný přístup
-Get-ExperimentalFeature
-Enable-ExperimentalFeature -Name PSNullConditionalOperators
-$Service = Get-Service -Name 'bits'
-if ([ExperimentalFeature]::IsEnabled("PSNullConditionalOperators"))
-{
-    ${Service}?.status
-}
-
 ## Operátory zřetězení
 ### Logické NEBO
 Get-Process calc -ErrorAction SilentlyContinue || "You have to run Calculator first" # Provede se pravá strana operátoru
@@ -389,6 +384,15 @@ Get-Process calc -ErrorAction SilentlyContinue || calc                          
 ### Logické A
 calc && Get-Process calc                   # Vykonají se obě strany operátoru
 calcTypoInProcessName && Get-Process calc  # Vykoná se pouze levá strana operátoru
+
+## Podmíněný přístup
+Get-ExperimentalFeature
+Enable-ExperimentalFeature -Name PSNullConditionalOperators
+$Service = Get-Service -Name 'bits'
+if ([ExperimentalFeature]::IsEnabled("PSNullConditionalOperators"))
+{
+    ${Service}?.status
+}
 
 # mnoho jiných experimentálních fíčur
 Start-Process -FilePath "https://docs.microsoft.com/en-us/powershell/scripting/learn/experimental-features?view=powershell-7.1"
