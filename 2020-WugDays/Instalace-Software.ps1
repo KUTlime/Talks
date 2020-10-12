@@ -153,6 +153,7 @@ Start-Process -FilePath 'https://github.com/OneGet/oneget'
 
 # Instalace Čokolády
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+Install-Module Choco -Force; ich
 
 # Použití
 choco search NÁZEV_BALÍČKU
