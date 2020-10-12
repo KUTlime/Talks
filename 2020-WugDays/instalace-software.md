@@ -1,4 +1,4 @@
-# Instalace software v roce 2020 (WUG Days 2020)
+# Instalace software ve Windows 10 roce 20 (WUG Days 2020)
 
 > Přednáška na konferenci WUG Day 2020, Brno, přednášeno online ze záznamu.
 
