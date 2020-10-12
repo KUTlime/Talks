@@ -44,6 +44,7 @@ Start-Process -FilePath 'https://www.slunecnice.cz/' # Automatizace prakticky ž
 <#
 Po cestě jsme dále posbírali:
 - Windows Store (AppX balíčky)
+- Microsoft Store (AppX balíčky, později i MSIX)
 - App Installer (Tool pro sideloading)
 - MSIX (next-gen MSI balíčků, předělávka AppX balíčků, která ale asi nikoho moc nezajímá)
 - OneGet
