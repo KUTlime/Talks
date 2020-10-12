@@ -287,6 +287,7 @@ Zkušenosti z vývoje:
 - Je komplikovaný.
 - Vleče se, aktuálně v PS repu 26xx otevřených issues, 91 otevřených PR, některé i více než 2 roky.
 - Je v tom chaos, např. PowerShellGetV2, kde jsou nepublikované release, PR jsou ignorovány měsíce i roky.
+- PowerShellGallery už měsíce nemá aktualizované statistiky stažení balíčků.
 #>
 ####################################################
 
