@@ -253,6 +253,9 @@ Start-Process -FilePath 'https://github.com/microsoft/winget-cli/releases/downlo
 winget search visual
 winget install powertoys --version 0.15.2
 winget show vscode
+
+# Listování WPM balíčky na webu a generování instalačního skriptu
+Start-Process -FilePath 'https://winstall.app/'
 ####################################################
 
 
