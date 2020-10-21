@@ -100,7 +100,7 @@ AppX (AppXBundle) je:
 - Matení BFU, protože to nezná
 
 AppX není:
-- Baličkovací systém
+- Balíčkovací systém
 
 Windows Store je:
 - Distribuční kanál
