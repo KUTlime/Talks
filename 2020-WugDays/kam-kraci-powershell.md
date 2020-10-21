@@ -10,11 +10,10 @@
 * Přehled verzí PowerShellu
 * Windows PowerShell vs. PowerShell (Core)
 * Jakou verzi dnes použít
-* Editory
 * Jak PowerShell vlastně funguje
+* Editory
 * Podpora PowerShell napříč systémy
 * Kompatibilita skriptů
 * Jak probíhá vývoj PowerShellu
 * Novinky v PowerShellu
-* Změny Power
 * Závěrečné shrnutí
