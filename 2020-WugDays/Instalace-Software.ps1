@@ -83,6 +83,11 @@ MSI chybí:
 - Hostování balíčků
 - Tranzitivní závislosti
 
+Vtipné je, že Microsoft má MSI formu balíčkovacího systému pro Windows Update.
+MSI pro Windows Update jsou MSU a stahují se z centrálního repositáře.
+Obdobně to funguje pro další software Microsoftu, který lze obsloužit pomocí
+Windows Update.
+
 #>
 Start-Process msiexec '-?'
 ####################################################
