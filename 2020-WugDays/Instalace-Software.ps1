@@ -245,163 +245,279 @@ winget show vscode
 # Automatizace instalací ve Windows
 ####################################################
 {
-    <# Co se většinou instaluje:
+  <# Co se většinou instaluje:
     1) MSI balíčky.
     2) MSIX balíčky.
     3) AppX balíčky
     4) Custom instalace
     #>
 
-    # 1) MSI Balíčky
-    $SetupFile = 'C:\MsiInstallers\Test.msi'
-    $DataStamp = get-date -Format yyyyMMddTHHmmss
-    $logFile = '{0}-{1}.log' -f $SetupFile, $DataStamp
-    $MSIArguments = @(
-      "/i"
-      ('"{0}"' -f $SetupFile)
-      "/qn"
-      "/norestart"
-      "/L*v"
-      $logFile
-    )
-    Start-Process -FilePath "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow
+  # 1) MSI Balíčky
+  $SetupFile = 'C:\MsiInstallers\Test.msi'
+  $DataStamp = get-date -Format yyyyMMddTHHmmss
+  $logFile = '{0}-{1}.log' -f $SetupFile, $DataStamp
+  $MSIArguments = @(
+    "/i"
+    ('"{0}"' -f $SetupFile)
+    "/qn"
+    "/norestart"
+    "/L*v"
+    $logFile
+  )
+  Start-Process -FilePath "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow
 
-    # nebo při problémech můžeme rovnou vynutit spuštění MSI balíčku.
-    Start-Process -FilePath $SetupFile -ArgumentList $MSIArguments -Wait
+  # nebo při problémech můžeme rovnou vynutit spuštění MSI balíčku.
+  Start-Process -FilePath $SetupFile -ArgumentList $MSIArguments -Wait
 
-    # Alternativně
-    $installationPath = 'C:\MsiInstallers'
-    $SetupFile = 'Test.msi'
-    Set-Location -Path $installationPath
-    Start-Process -FilePath Msiexec -ArgumentList "/passive /i $SetupFile" -Wait
+  # Alternativně
+  $installationPath = 'C:\MsiInstallers'
+  $SetupFile = 'Test.msi'
+  Set-Location -Path $installationPath
+  Start-Process -FilePath Msiexec -ArgumentList "/passive /i $SetupFile" -Wait
 
-    # 2) MSIX Balíčky
-    Start-Process -FilePath 'https://docs.microsoft.com/en-us/windows/msix/desktop/powershell-msix-cmdlets'
+  # 2) MSIX Balíčky
+  Start-Process -FilePath 'https://docs.microsoft.com/en-us/windows/msix/desktop/powershell-msix-cmdlets'
 
-    # Nově lze ovládat pomocí příkazů z modulu AppX, viz níže.
+  # Nově lze ovládat pomocí příkazů z modulu AppX, viz níže.
 
-    # 3) Možnost side loadingu, ale není to šťastné řešení.
-    Get-Command -Module Appx
+  # 3) Možnost side loadingu, ale není to šťastné řešení.
+  Get-Command -Module Appx
 
-    # 4) Ostatní instalace
+  # 4) Ostatní instalace
 
-    # Máme několik možností:
-    # I.  Choco - touto možností bychom měli začít.
-    # II. Stažení instalace z internetu, zjištění cmd argumentů a přizpůsobení instalace tomuto instalátoru.
+  # Máme několik možností:
+  # I.  Choco - touto možností bychom měli začít.
+  # II. Stažení instalace z internetu, zjištění cmd argumentů a přizpůsobení instalace tomuto instalátoru.
 
-    # Instalace Choco balíčku
+  # Instalace Choco balíčku
+  {
+    function Install-Choco
     {
-      function Install-Choco
-      {
-        Write-Host "Installing Chocolatey..."
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12  # No. 1 co je potřeba ohlídat.
-        Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+      Write-Host "Installing Chocolatey..."
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12  # No. 1 co je potřeba ohlídat.
+      Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-        # No. 2 co je potřeba ohlídat, je pokud instaluje balíček z www.github.com
-        # www.github.com je plně běží pod IPv6 a DNS IPv4 nedokáže lokalizovat www.github.com
-      }
-
-      function Set-DnsIpV6Servers
-      {
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { Start-Process powershell.exe "-ExecutionPolicy Bypass -Command Set-DnsIpV6Servers" -Verb RunAs; exit }
-
-        Get-NetAdapter -Physical |
-        Where-Object { $_.Name -notcontains 'hyper' -or $_.Description -notcontains 'hyper' } |
-        Set-DnsClientServerAddress -ServerAddresses ("2606:4700:4700::1111", "2606:4700:4700::1001") # Open DNS by CloudFare
-      }
+      # No. 2 co je potřeba ohlídat, je pokud instaluje balíček z www.github.com
+      # www.github.com je plně běží pod IPv6 a DNS IPv4 nedokáže lokalizovat www.github.com
     }
 
-    # Instalace Choco balíčků
-    choco upgrade firefox -y # atd.
-
-    # Je vhodné vyčlenit každou instalaci do samostatné funkce a sestavit např. instalační modul.
-    # Můžeme tím hlouběji ovládat instalace, přistoupit k instalacím a obnově nastavení systematicky.
-    # Pokud potřebujeme admin práva pro instalaci dané aplikace, můžeme např. do funkce s názvem 'Install-Firefox' šoupnout zaříkadlo:
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { Start-Process powershell.exe "-ExecutionPolicy Bypass -Command Install-Firefox" -Verb RunAs; exit }
-
-    # Stažení souboru z internetu
-    $wc = New-Object System.Net.WebClient
-    $wc.DownloadFile('https://cdn.adguard.com/public/Windows/AdGuard.msi', $SetupFile)
-
-    # Skenování přepínačů
-    # Pobavilo... aneb lokalizace uživatele na internetu...
-    Start-Process -FilePath 'https://www.google.com/search?client=firefox-b-d&sxsrf=ALeKk035serjZHtUR-J59-mJMp0PDgQJDw%3A1588217540083&ei=xEaqXqrYBI7psAeio7voCA&q=Universal+Silent+Switch+Finder+download&oq=Universal+Silent+Switch+Finder+download&gs_lcp=CgZwc3ktYWIQAzIGCAAQBxAeMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgUIABDLAToGCCMQJxATOgYIABAIEB46CAgAEAcQHhATUMILWKAOYJsXaABwAHgAgAFViAGBA5IBATWYAQCgAQKgAQGqAQdnd3Mtd2l6&sclient=psy-ab&ved=0ahUKEwiqyrWym4_pAhWONOwKHaLRDo0Q4dUDCAs&uact=5'
-    Start-Process -FilePath 'https://www.google.com/search?q=Universal+Silent+Switch+Finder'
-
-    # Aktualizace PATH za běhu konzole
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-
-    # Spuštění obecné instalace
-    Start-Process -FilePath $PathToSetupFile -ArgumentList "/SILENT /InstallPath=C:\ProgramData" -Wait
-    Start-Process -FilePath $PathToSetupFile -ArgumentList "/SILENT", "/InstallPath=`"C:\ProgramData`"" -Wait # ArgumentList přebírá string[]
-
-    # Skrze PowerShell
-    Start-Process -FilePath powershell -ArgumentList "" -Wait # Možnosti předání cmd argumentů viz nápověda na následujícím odkazu:
-    Start-Process -FilePath 'https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_PowerShell_exe?view=powershell-5.1'
-    # U předávání cest k ps1 souborů, je nutné je uzavřít do dvojitých uvozovek.
-
-    # Pro obnovu nastavení můžeme použít klasické cmdlety pro práci se soubory:
-    Get-Command -Noun Item
-
-    # Pro import nastavení registrů můžeme registry editovat buď opět přes cmdlety k tomu určené...
-    Get-Command -Noun Item
-    Get-Command -Noun ItemProperty
-
-    # nebo importovat zálohu reg souboru
-    reg import "$PathToRegFileBackup" # Pozor! Regedit musí být nejprve spuštěn v GUI módu, aby fungoval správně.
-    Start-process regedit -Verb runAs -Wait # Po zavření aplikace bude fungovat import správně.
-
-    # Specialita: Instalace aplikace z admin uživatele bez admin práv
+    function Set-DnsIpV6Servers
     {
-      $storeSpotify = Get-AppxPackage -Name *spotify*
-      if ($storeSpotify)
-      {
-        $storeSpotify | Remove-AppxPackage
-      }
-      $spotifyDefaultPath = "$env:APPDATA\Spotify\Spotify.exe"
-      if ($spotifyDefaultPath | Test-Path)
-      {
-        Start-Process -FilePath "$env:APPDATA\Spotify\Spotify.exe" -Wait
-        Get-Process -Name *spotify* | Stop-Process -Force
-        Start-Process -FilePath "$env:APPDATA\Spotify\Spotify.exe" -ArgumentList '/UNINSTALL', '/SILENT' -Wait
-      }
-      if (Get-Package -Provider Programs | Where-Object { $_.Name -contains 'spotify' } )
-      {
-        throw 'Spotify wasn''t uninstalled.'
-      }
+      if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { Start-Process powershell.exe "-ExecutionPolicy Bypass -Command Set-DnsIpV6Servers" -Verb RunAs; exit }
 
-      $apppath = "powershell.exe"
-      $taskname = 'Spotify install'
-      $action = New-ScheduledTaskAction -Execute $apppath -Argument "-Command & `'$env:OneDriveConsumer\PC\6 - Multimédia (MPC HC VLC Kodi Spotify)\spotify-1-0-80-474.exe`'"
-      $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
-      Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskname
-      Start-ScheduledTask -TaskName $taskname
-      Start-Sleep -Seconds 2
-      Wait-Process -Name *spotify-1-0-80-474* # Tady se mám PowerShell zastaví, dokud se tato aplikace neukončí.
+      Get-NetAdapter -Physical |
+      Where-Object { $_.Name -notcontains 'hyper' -or $_.Description -notcontains 'hyper' } |
+      Set-DnsClientServerAddress -ServerAddresses ("2606:4700:4700::1111", "2606:4700:4700::1001") # Open DNS by CloudFare
     }
-
-    # Zjištění nainstalovaných programů, které se hlásí v Programy Přidat/odebrat programy
-    Get-Package -Provider Programs
-
-    # Zjištění všech nainstalovaných komponentů
-    Get-WmiObject -Class Win32_Product | Format-Table
-
-    # Klasické schéma instalace aplikace
-    # 1) Získat balíček (Choco, stáhnout z internetu, sítě...)
-    # 2) Zkontrolovat předpoklady (stažení, funkčnost instalace služby, přítomnost redistribučních balíčků, pokud jsou potřeba, odinstalace předchozí verze pokud je nutná)
-    # 3) Zjistit přepínače tiché instalace.
-    # 4) Nadefinovat spuštění aplikace
-    # 5) Kontrola výsledků, např. kontrola souborů, registrů atd.
-    # 6) Kopie nastavení
   }
-  ####################################################
+
+  # Instalace Choco balíčků
+  choco upgrade firefox -y # atd.
+
+  # Je vhodné vyčlenit každou instalaci do samostatné funkce a sestavit např. instalační modul.
+  # Můžeme tím hlouběji ovládat instalace, přistoupit k instalacím a obnově nastavení systematicky.
+  # Pokud potřebujeme admin práva pro instalaci dané aplikace, můžeme např. do funkce s názvem 'Install-Firefox' šoupnout zaříkadlo:
+  if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { Start-Process powershell.exe "-ExecutionPolicy Bypass -Command Install-Firefox" -Verb RunAs; exit }
+
+  # Stažení souboru z internetu
+  $wc = New-Object System.Net.WebClient
+  $wc.DownloadFile('https://cdn.adguard.com/public/Windows/AdGuard.msi', $SetupFile)
+
+  # Skenování přepínačů
+  # Pobavilo... aneb lokalizace uživatele na internetu...
+  Start-Process -FilePath 'https://www.google.com/search?client=firefox-b-d&sxsrf=ALeKk035serjZHtUR-J59-mJMp0PDgQJDw%3A1588217540083&ei=xEaqXqrYBI7psAeio7voCA&q=Universal+Silent+Switch+Finder+download&oq=Universal+Silent+Switch+Finder+download&gs_lcp=CgZwc3ktYWIQAzIGCAAQBxAeMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgUIABDLAToGCCMQJxATOgYIABAIEB46CAgAEAcQHhATUMILWKAOYJsXaABwAHgAgAFViAGBA5IBATWYAQCgAQKgAQGqAQdnd3Mtd2l6&sclient=psy-ab&ved=0ahUKEwiqyrWym4_pAhWONOwKHaLRDo0Q4dUDCAs&uact=5'
+  Start-Process -FilePath 'https://www.google.com/search?q=Universal+Silent+Switch+Finder'
+
+  # Aktualizace PATH za běhu konzole
+  $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+
+  # Spuštění obecné instalace
+  Start-Process -FilePath $PathToSetupFile -ArgumentList "/SILENT /InstallPath=C:\ProgramData" -Wait
+  Start-Process -FilePath $PathToSetupFile -ArgumentList "/SILENT", "/InstallPath=`"C:\ProgramData`"" -Wait # ArgumentList přebírá string[]
+
+  # Skrze PowerShell
+  Start-Process -FilePath powershell -ArgumentList "" -Wait # Možnosti předání cmd argumentů viz nápověda na následujícím odkazu:
+  Start-Process -FilePath 'https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_PowerShell_exe?view=powershell-5.1'
+  # U předávání cest k ps1 souborů, je nutné je uzavřít do dvojitých uvozovek.
+
+  # Pro obnovu nastavení můžeme použít klasické cmdlety pro práci se soubory:
+  Get-Command -Noun Item
+
+  # Pro import nastavení registrů můžeme registry editovat buď opět přes cmdlety k tomu určené...
+  Get-Command -Noun Item
+  Get-Command -Noun ItemProperty
+
+  # nebo importovat zálohu reg souboru
+  reg import "$PathToRegFileBackup" # Pozor! Regedit musí být nejprve spuštěn v GUI módu, aby fungoval správně.
+  Start-process regedit -Verb runAs -Wait # Po zavření aplikace bude fungovat import správně.
+
+  # Specialita: Instalace aplikace z admin uživatele bez admin práv
+  {
+    $storeSpotify = Get-AppxPackage -Name *spotify*
+    if ($storeSpotify)
+    {
+      $storeSpotify | Remove-AppxPackage
+    }
+    $spotifyDefaultPath = "$env:APPDATA\Spotify\Spotify.exe"
+    if ($spotifyDefaultPath | Test-Path)
+    {
+      Start-Process -FilePath "$env:APPDATA\Spotify\Spotify.exe" -Wait
+      Get-Process -Name *spotify* | Stop-Process -Force
+      Start-Process -FilePath "$env:APPDATA\Spotify\Spotify.exe" -ArgumentList '/UNINSTALL', '/SILENT' -Wait
+    }
+    if (Get-Package -Provider Programs | Where-Object { $_.Name -contains 'spotify' } )
+    {
+      throw 'Spotify wasn''t uninstalled.'
+    }
+
+    $apppath = "powershell.exe"
+    $taskname = 'Spotify install'
+    $action = New-ScheduledTaskAction -Execute $apppath -Argument "-Command & `'$env:OneDriveConsumer\PC\6 - Multimédia (MPC HC VLC Kodi Spotify)\spotify-1-0-80-474.exe`'"
+    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
+    Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskname
+    Start-ScheduledTask -TaskName $taskname
+    Start-Sleep -Seconds 2
+    Wait-Process -Name *spotify-1-0-80-474* # Tady se mám PowerShell zastaví, dokud se tato aplikace neukončí.
+  }
+
+  # Zjištění nainstalovaných programů, které se hlásí v Programy Přidat/odebrat programy
+  Get-Package -Provider Programs
+
+  # Zjištění všech nainstalovaných komponentů
+  Get-WmiObject -Class Win32_Product | Format-Table
+  # (POZOR NEZBEZPEČÍ VEDLEJŠÍCH ÚČINKŮ)
+  Start-Process -FilePath 'https://xkln.net/blog/please-stop-using-win32product-to-find-installed-software-alternatives-inside/'
+  # Právně takto:
+  function Get-InstalledApplications()
+  {
+    [cmdletbinding(DefaultParameterSetName = 'GlobalAndAllUsers')]
+
+    Param (
+      [Parameter(ParameterSetName = "Global")]
+      [switch]$Global,
+      [Parameter(ParameterSetName = "GlobalAndCurrentUser")]
+      [switch]$GlobalAndCurrentUser,
+      [Parameter(ParameterSetName = "GlobalAndAllUsers")]
+      [switch]$GlobalAndAllUsers,
+      [Parameter(ParameterSetName = "CurrentUser")]
+      [switch]$CurrentUser,
+      [Parameter(ParameterSetName = "AllUsers")]
+      [switch]$AllUsers
+    )
+
+    # Explicitly set default param to True if used to allow conditionals to work
+    if ($PSCmdlet.ParameterSetName -eq "GlobalAndAllUsers")
+    {
+      $GlobalAndAllUsers = $true
+    }
+
+    # Check if running with Administrative privileges if required
+    if ($GlobalAndAllUsers -or $AllUsers)
+    {
+      $RunningAsAdmin = (New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+      if ($RunningAsAdmin -eq $false)
+      {
+        Write-Error "Finding all user applications requires administrative privileges"
+        break
+      }
+    }
+
+    # Empty array to store applications
+    $Apps = [System.Collections.Generic.List[Object]]::new()
+    $32BitPath = "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $64BitPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+
+    # Retrieve globally installed applications
+    if ($Global -or $GlobalAndAllUsers -or $GlobalAndCurrentUser)
+    {
+      Write-Host "Processing global hive"
+      $Apps.AddRange((Get-ItemProperty "HKLM:\$32BitPath"))
+      $Apps.AddRange((Get-ItemProperty "HKLM:\$64BitPath"))
+    }
+
+    if ($CurrentUser -or $GlobalAndCurrentUser)
+    {
+      Write-Host "Processing current user hive"
+      $Apps.AddRange((Get-ItemProperty "Registry::\HKEY_CURRENT_USER\$32BitPath"))
+      $Apps.AddRange((Get-ItemProperty "Registry::\HKEY_CURRENT_USER\$64BitPath"))
+    }
+
+    if ($AllUsers -or $GlobalAndAllUsers)
+    {
+      Write-Host "Collecting hive data for all users"
+      $AllProfiles = Get-CimInstance Win32_UserProfile |
+      Select-Object LocalPath, SID, Loaded, Special |
+      Where-Object { $_.SID -like "S-1-5-21-*" }
+      $MountedProfiles = $AllProfiles | Where-Object { $_.Loaded -eq $true }
+      $UnmountedProfiles = $AllProfiles | Where-Object { $_.Loaded -eq $false }
+
+      Write-Host "Processing mounted hives"
+      $MountedProfiles | ForEach-Object {
+        $32bit = Get-ItemProperty -Path "Registry::\HKEY_USERS\$($_.SID)\$32BitPath"
+        $64bit = Get-ItemProperty -Path "Registry::\HKEY_USERS\$($_.SID)\$64BitPath"
+        if (![Object]::Equals($32bit, $null))
+        {
+          $Apps.AddRange($32bit)
+        }
+        if (![Object]::Equals($64bit, $null))
+        {
+          $Apps.AddRange($64bit)
+        }
+      }
+
+      Write-Host "Processing unmounted hives"
+      $UnmountedProfiles | ForEach-Object {
+
+        $Hive = "$($_.LocalPath)\NTUSER.DAT"
+        Write-Host " -> Mounting hive at $Hive"
+
+        if (Test-Path $Hive)
+        {
+          REG LOAD HKU\temp $Hive
+          $32bit = Get-ItemProperty -Path "Registry::\HKEY_USERS\temp\$32BitPath"
+          $64bit = Get-ItemProperty -Path "Registry::\HKEY_USERS\temp\$64BitPath"
+          if (![Object]::Equals($32bit, $null))
+          {
+            $Apps.AddRange($32bit)
+          }
+          if (![Object]::Equals($64bit, $null))
+          {
+            $Apps.AddRange($64bit)
+          }
+
+          # Run manual GC to allow hive to be unmounted
+          [GC]::Collect()
+          [GC]::WaitForPendingFinalizers()
+
+          REG UNLOAD HKU\temp
+
+        }
+        else
+        {
+          Write-Warning "Unable to access registry hive at $Hive"
+        }
+      }
+    }
+
+    Write-Output $Apps
+  }
+
+  # Klasické schéma instalace aplikace
+  # 1) Získat balíček (Choco, stáhnout z internetu, sítě...)
+  # 2) Zkontrolovat předpoklady (stažení, funkčnost instalace služby, přítomnost redistribučních balíčků, pokud jsou potřeba, odinstalace předchozí verze pokud je nutná)
+  # 3) Zjistit přepínače tiché instalace.
+  # 4) Nadefinovat spuštění aplikace
+  # 5) Kontrola výsledků, např. kontrola souborů, registrů atd.
+  # 6) Kopie nastavení
+}
+####################################################
 
 
-  ####################################################
-  # Závěr
-  ####################################################
-  # 1. Ani v roce 2020 se situace okolo instalací software příliš nelepší
-  # 2. Jediné použitelné CLI pro Windows je Choco
-  # 3. OneGet je mrtvý projekt
-  # 4. Windows Package Manager je tak 2 roky vývoje od použitelné verze v praxi #IMHO
-  ####################################################
+####################################################
+# Závěr
+####################################################
+# 1. Ani v roce 2020 se situace okolo instalací software příliš nelepší
+# 2. Jediné použitelné CLI pro Windows je Choco
+# 3. OneGet je mrtvý projekt
+# 4. Windows Package Manager je tak 2 roky vývoje od použitelné verze v praxi #IMHO
+####################################################
