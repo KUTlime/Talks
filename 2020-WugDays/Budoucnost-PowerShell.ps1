@@ -93,8 +93,6 @@ v7.1.0 RC1	| Září  	2020 	| PowerShell    		| .NET 5.0-RC1
 Write-Host ("Total number of commands: " + (Get-Command).Count)
 Get-Module -ListAvailable
 Get-Command * | Measure-Object # pro porovnání obou verzí
-Start-Process -FilePath 'https://github.com/KUTlime/PowerShell-pohledem-dotNET-programatora/blob/master/Images/PowerShell%20Windows%20DLL%20dependency.png'
-Start-Process -FilePath 'https://github.com/KUTlime/PowerShell-pohledem-dotNET-programatora/blob/master/Images/PowerShell%20Core.png'
 Start-Process -FilePath 'https://4sysops.com/wiki/differences-between-powershell-versions/'
 Start-Process -FilePath 'https://github.com/PowerShell/PowerShell/tags'
 ####################################################
@@ -132,6 +130,28 @@ Verze 7.0.x byla první LTS verzí pro PowerShell.
 #>
 Start-Process -FilePath 'https://docs.microsoft.com/en-us/lifecycle/policies/modern'
 Start-Process -FilePath 'https://docs.microsoft.com/en-us/powershell/scripting/powershell-support-lifecycle?view=powershell-7'
+####################################################
+
+
+####################################################
+# Jak PS (Core) vlastně funguje?
+####################################################
+<# Klíčové koncepty:
+
+Windows PowerShell  => Postaven na .NET Framework
+PowerShell Core     => Postaven na .NET Core
+PowerShell          ´> Postaven na .NET Core a .NET 5, 6,...)
+
+CMD && UNIX && Linux    => textový vstup | výstup
+PS                      => Objektový vstup | výstup
+
+Jelikož PS úzce spoléhá na .NET, je postaven objektově.
+Klíčový je koncept roury, která umožňuje snadné zřetězení programů.
+Tento koncept zůstal zachován i v nové verzi PS.
+
+PS je postaven s novou filozofií:
+Ovládat UNIX-like systémy (macOS, Linux) z Windows a naopak.
+#>
 ####################################################
 
 
@@ -181,28 +201,6 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Switch to Windows PowerShel
 
     }, "ALT+F5") | Out-Null
 # Ideální vložit do profile.ps1
-####################################################
-
-
-####################################################
-# Jak PS (Core) vlastně funguje?
-####################################################
-<# Klíčové koncepty:
-
-Windows PowerShell  => Postaven na .NET Framework
-PowerShell Core     => Postaven na .NET Core
-PowerShell          ´> Postaven na .NET Core a .NET 5, 6,...)
-
-CMD && UNIX && Linux    => textový vstup | výstup
-PS                      => Objektový vstup | výstup
-
-Jelikož PS úzce spoléhá na .NET, je postaven objektově.
-Klíčový je koncept roury, která umožňuje snadné zřetězení programů.
-Tento koncept zůstal zachován i v nové verzi PS.
-
-PS je postaven s novou filozofií:
-Ovládat UNIX-like systémy (macOS, Linux) z Windows a naopak.
-#>
 ####################################################
 
 
@@ -263,7 +261,7 @@ Get-Service # Příklad cmdletu, u kterého nezáleží na verzi, ale záleží 
 ## Platný PS skript pro jednu platformu nemusí být platný PS skript pro jinou platformu, včetně oficiálně podporovaných.
 ## Moderně napsaný PS skript je neplatný WPS skript.
 
-# PowerShell dále obsahuje celou řadu nových věcí, viz další kapitola
+# PowerShell dále obsahuje celou řadu nových věcí, viz kapitola níže.
 ####################################################
 
 
@@ -306,8 +304,8 @@ $env:POWERSHELL_DISTRIBUTION_CHANNEL # Telemetrická proměnná pro distribučn�
 # Jiné chování chyb
 ## Jedná se o změnu chování ToString() metody, která nevypisuje tolik informací.
 Start-Process -FilePath powershell -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'Some error'}" -NoNewWindow
-Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'asdf'}" -NoNewWindow
-Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'asdf'; Get-Error}" -NoNewWindow
+Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'Some error'}" -NoNewWindow
+Start-Process -FilePath pwsh -ArgumentList "-NoLogo -NoProfile -Command &{Write-Error 'Some error'; Get-Error}" -NoNewWindow
 
 $ErrorView = 'NormalView' # Starý způsob alá WPS5
 $ErrorView = 'ConciseView' # Nový způsob alá PS
@@ -334,10 +332,6 @@ Import-Module OpenHere -UseWindowsPowerShell # Vytvoří proxy modul, který del
 ## Jednodušší připojení v případech mimo AD.
 ## Mohu použít jakýkoliv SSH klient.
 Start-Process -FilePath "https://4sysops.com/archives/enable-powershell-core-6-remoting-with-ssh-transport/#enabling-ssh-for-powershell-on-the-host"
-
-
-# Paralelní zpracování pro ForEach-Object
-'Security', 'Application', 'System' | ForEach-Object -Parallel { Get-WinEvent -LogName $_ -MaxEvents 1000 } -ThrottleLimit 5
 
 # Nativní příkazy
 ## Snaha o "vygenerování" nativních příkazů PS pro existující utility jako kubectl, docker, git, netsh, net...
@@ -423,8 +417,9 @@ LTS verze. Smysl dává konec roku 2021 po .NET 6.
 #>
 ####################################################
 
+
 ####################################################
-# Jak zajistit běh v PSC?
+# Jak zajistit běh v PS?
 ####################################################
 # Magické zaříkávadlo
 if ($PSEdition -eq 'Desktop') { Start-Process pwsh.exe "-ExecutionPolicy Bypass -File `"$PSCommandPath`""; exit }

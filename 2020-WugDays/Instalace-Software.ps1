@@ -44,6 +44,7 @@ Start-Process -FilePath 'https://www.slunecnice.cz/' # Automatizace prakticky ž
 <#
 Po cestě jsme dále posbírali:
 - Windows Store (AppX balíčky)
+- MSI
 - Microsoft Store (AppX balíčky, později i MSIX)
 - App Installer (Tool pro sideloading)
 - MSIX (next-gen MSI balíčků, předělávka AppX balíčků, která ale asi nikoho moc nezajímá)
@@ -53,12 +54,11 @@ Po cestě jsme dále posbírali:
 - Windows Package Manager
 
 #>
-Start-Process ms-windows-store:
 
 #...a marasmus instalací dále pokračuje.
 # AppX balíčky byly dlouho totální problém, teď už je to jenom problém,
 # MSIX balíčky nikoho nezajímají, já osobně je viděl prvně u PS Core,
-# u PS už ani nejsou. Windows Store doteď nemá CLI ovládání/automatizaci.
+# u PS už ani nejsou. Windows/Microsoft Store doteď nemá CLI ovládání/automatizaci.
 # Dokud jsem nezačal používat Linux/Android, celé mi to přišlo normální.
 # Teď mi to přijde spíše k pláči. MS nedokáže pohnout problematiku kupředu,
 # znova a znova vymýšlí kolo.
@@ -83,6 +83,11 @@ MSI chybí:
 - Hostování balíčků
 - Tranzitivní závislosti
 
+Vtipné je, že Microsoft má MSI formu balíčkovacího systému pro Windows Update.
+MSI pro Windows Update jsou MSU a stahují se z centrálního repositáře.
+Obdobně to funguje pro další software Microsoftu, který lze obsloužit pomocí
+Windows Update.
+
 #>
 Start-Process msiexec '-?'
 ####################################################
@@ -99,7 +104,14 @@ AppX (AppXBundle) je:
 - Oproti MSI nový formát balíčků, které podporuje ochranu pro "úpravám"
 - Matení BFU, protože to nezná
 
+AppX není:
+- Balíčkovací systém
+
+Windows Store je:
+- Distribuční kanál
+
 #>
+Start-Process ms-windows-store:
 Add-AppPackage -Path MyAppxPackage.appx -Register
 Add-AppPackage -Path MyAppxPackage.appx
 Get-Command -Module Appx
@@ -141,12 +153,13 @@ OneGet je:
 - Správce balíčkovacích systémů pro Windows
 - Dobrá myšlenka, tragická realizace
 - Open-source
-- Prakticky nulový vývoj
+- Prakticky nulový vývoj (pouze bezpečnostní záplaty)
 - Vyžaduje netriviální konfiguraci pro triviální systémy, např. choco
 - Defaultně přítomen v Win10, ale nelze ho bez konfigurace použít.
 - V praxi není důvod proč ho používat
 
 #>
+Install-PackageProvider -Name "Nuget" -RequiredVersion "2.8.5.216" -Force # Instalace poskytovatele NuGet
 Get-Command -Module 'PackageManagement'
 Start-Process -FilePath 'https://github.com/OneGet/oneget/wiki/Provider-Requests'
 Start-Process -FilePath 'https://github.com/OneGet/oneget'
@@ -173,7 +186,7 @@ Start-Process -FilePath 'https://github.com/OneGet/oneget'
 
 # Instalace Čokolády
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-Install-Module Choco -Force; ich
+Install-Module Choco; ich
 
 # Použití
 choco search NÁZEV_BALÍČKU
@@ -208,6 +221,8 @@ Ninite je:
 - Obsahuje vyšší desítky software k dispozici
 - Částečně zastaralé verze balíčků
  #>
+
+ Start-Process -FilePath 'https://ninite.com/'
 ####################################################
 
 
@@ -238,6 +253,9 @@ Start-Process -FilePath 'https://github.com/microsoft/winget-cli/releases/downlo
 winget search visual
 winget install powertoys --version 0.15.2
 winget show vscode
+
+# Listování WPM balíčky na webu a generování instalačního skriptu
+Start-Process -FilePath 'https://winstall.app/'
 ####################################################
 
 
