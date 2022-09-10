@@ -8,5 +8,8 @@
         "latex",
         "plaintext",
         "powershell"
+    ],
+    "cSpell.words": [
+        "FEKT"
     ]
 }
