@@ -26,7 +26,10 @@ Install-Script Install-VSCode -Scope CurrentUser; Install-VSCode.ps1
 
 ## Zdroje
 
-[PowerShell na GitHubu](https://github.com/PowerShell/PowerShell)
-[Co nového v PowerShellu](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-73?view=powershell-7.3)
-[Změny pro verzi 7.2.x](https://github.com/PowerShell/PowerShell/blob/master/CHANGELOG/7.2.md)
-[Změny pro verzi 7.3.x](https://github.com/PowerShell/PowerShell/blob/master/CHANGELOG/7.3.md)
+* [PowerShell na GitHubu](https://github.com/PowerShell/PowerShell)
+* [Co nového v PowerShellu](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-73?view=powershell-7.3)
+* [Změny pro verzi 7.2.x](https://github.com/PowerShell/PowerShell/blob/master/CHANGELOG/7.2.md)
+* [Změny pro verzi 7.3.x](https://github.com/PowerShell/PowerShell/blob/master/CHANGELOG/7.3.md)
+* [Microsoft Docs pro winget](https://docs.microsoft.com/en-us/windows/package-manager/winget/)
+* [winget na GitHub](https://github.com/microsoft/winget-cli)
+* []()
