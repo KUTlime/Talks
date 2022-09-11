@@ -1,0 +1,50 @@
+{
+    "$schema": "https://aka.ms/PowerShell/Crescendo/Schemas/2021-11",
+    "Verb": "Get",
+    "Noun": "IpConfig",
+    "OriginalName":"c:/windows/system32/ipconfig.exe",
+    "Description": "This will display the current IP configuration information on Windows",
+
+    "Parameters": [ 
+        {
+            "Name":"All",
+            "OriginalName": "/all",
+            "ParameterType": "switch",
+            "Description": "This switch provides all ip configuration details"
+        },
+        {
+            "Name":"AllCompartments",
+            "OriginalName": "/allcompartments",
+            "ParameterType": "switch",
+            "Description": "This switch provides compartment configuration details"
+        }
+    ],
+
+    "OutputHandlers": [
+        {
+        "ParameterSetName": "Default",
+        "Handler":"param ( $lines )
+        $post = $false;
+        foreach($line in $lines | ?{$_.trim()}) {
+            $LineToCheck = $line | select-string '^[a-z]';
+            if ( $LineToCheck ) {
+                if ( $post ) { [pscustomobject]$ht |add-member -pass -typename $oName }
+                $oName = ($LineToCheck -match 'Configuration') { 'IpConfiguration' } else {'EthernetAdapter'}
+                $ht = @{};
+                $post = $true
+            }
+            else {
+                if ( $line -match '^   [a-z]' ) {
+                    $prop,$value = $line -split ' :',2;
+                    $pName = $prop -replace '[ .-]';
+                    $ht[$pName] = $value.Trim()
+                }
+                else {
+                    $ht[$pName] = .{$ht[$pName];$line.trim()}
+                }
+            }
+        }
+        [pscustomobject]$ht | add-member -pass -typename $oName"
+        }
+    ]
+}
