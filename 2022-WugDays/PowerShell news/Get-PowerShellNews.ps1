@@ -7,11 +7,14 @@ v7.2.6  	| Srpen  	2022 	| PowerShell    		| .NET 6.0.8
 v7.3.0 PR7	| Srpen  	2022 	| PowerShell    		| .NET 7.0.100-preview.7.22377.5
 
 #>
+#####################################################################################
 
 # Co nového - The PS style
 Install-Module -Name Microsoft.PowerShell.WhatsNew
 Get-Command -Module WhatsNew
 Get-WhatsNew
+#####################################################################################
+
 
 <# Jak jsme na tom s chybami?
 
@@ -20,6 +23,7 @@ V roce 2022 jsme měli 3192 nahlášených chyb, 7221 zavřených a 79 otevřen�
 Za        2 roky    o  554 více        chyb, 1686 zavřených chyb v mezidobí   , 1567 zavřených PR v mezidobí.
 
 #>
+#####################################################################################
 
 <# PS 7.2.0
 
@@ -61,6 +65,8 @@ Za        2 roky    o  554 více        chyb, 1686 zavřených chyb v mezidobí 
   (New-PSSessionConfigurationFile nevrací chybu při použití např. na macOS).
 
 #>
+# Jak se nám posunuli experimentální fíčury?
+Start-Process -FilePath 'https://docs.microsoft.com/en-us/powershell/scripting/learn/experimental-features?view=powershell-7.3#available-features'
 
 # PSNativeCommandArgumentPassing - experimentální fíčura pro obarvení
 Get-ExperimentalFeature
@@ -79,6 +85,8 @@ pwsh # Potřebujeme nové sezení
 Get-ExperimentalFeature
 Get-ChildItem
 $PSStyle.FileInfo
+#####################################################################################
+
 
 # PSReadLine - module pro našeptávání z historie zadávání
 Install-Module -Name PSReadLine -Force
@@ -87,6 +95,7 @@ Set-PSReadLineOption -PredictionSource History # Od v2.2.6 již nemusíme, nasta
 # Nastavení listování v historii, funguje standardně pro prázdný řádek, jinak v historii zadávání.
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+#####################################################################################
 
 <# Crescendo - modul pro generování PS příkazů (modulů) pro obalení nativních utilit
 
@@ -97,56 +106,16 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 - Potřeba velká míra ruční práce na tvorbu schématu.
 
 #>
-Install-Module -Name Microsoft.PowerShell.Crescendo -PassThru | Import-Module
-
-$command = New-CrescendoCommand -Verb 'Get' -Noun 'IpConfig' -OriginalName 'ipconfig.exe'
-$command.Platform = 'Windows'
-$parameter = New-ParameterInfo -Name 'All' -OriginalName '-all'
-$parameter.Aliases = '-a'
-$parameter.OriginalPosition = 0
-$parameter.ParameterType = 'string'
-$parameter.ParameterSetName = 'Default'
-$command.Parameters = $parameter
-$handler = New-OutputHandler
-$handler.ParameterSetName = 'Default'
-$handler.Handler = @"
-param ( `$lines )
-`$post = `$false;
-foreach(`$line in (`$lines | ?{`$_.trim()}))
-{
-    `$LineToCheck = `$line | select-string '^[a-z]';
-    if ( `$LineToCheck ) {
-        if ( `$post ) { [pscustomobject] `$ht |add-member -pass -typename `$oName }
-        `$oName = if (`$LineToCheck -match 'Configuration') { 'IpConfiguration' } else {'EthernetAdapter'}
-        `$ht = @{};
-        `$post = `$true
-    }
-    else {
-        if ( `$line -match '^   [a-z]' ) {
-            `$prop,`$value = `$line -split ' :',2;
-            `$pName = `$prop -replace '[ .-]';
-            `$ht[`$pName] = `$value.Trim()
-        }
-        else {
-            `$ht[`$pName] = .{`$ht[`$pName];`$line.trim()}
-        }
-    }
-}
-[pscustomobject] `$ht | add-member -pass -typename `$oName
-"@
-$command.OutputHandlers = $handler
 $rootPath = Resolve-Path -Path ([string]::IsNullOrWhiteSpace($PSScriptRoot) ? $PWD : $PSScriptRoot) -Relative
-$assetPath = Get-ChildItem -Path $rootPath -Recurse -Directory -Filter 'assets' | Where-Object {$_.FullName -match 'news'}
-$configurationFile = Join-Path -Path $assetPath -ChildPath 'get-ipconfig2.crescendo.json'
-@{
-  '$schema' = 'https://aka.ms/PowerShell/Crescendo/Schemas/2021-11'
-  Commands  = @($command)
-} | ConvertTo-Json -Depth 99 | Out-File $configurationFile -Force
-
-Export-CrescendoModule -ConfigurationFile $configurationFile -ModuleName (Join-Path $assetPath 'WUG') -Force
+$examplePath = Get-ChildItem -Path $rootPath -Recurse -File -Filter '*.ps1' | Where-Object {$_.FullName -match 'Crescendo'} | Select-Object -ExpandProperty FullName
+code $examplePath
 
 # Dobrý příklad pro pochopení jak to funguje
 Start-Process -FilePath 'https://github.com/adamdriscoll/sysinternals'
+
+# Celé schéma
+Start-Process -FilePath 'https://raw.githubusercontent.com/PowerShell/Crescendo/master/Microsoft.PowerShell.Crescendo/schemas/2021-11'
+#####################################################################################
 
 <# Microsoft.PowerShell.Archive - nová verze (v2) pro práci s archívy v PS
 
@@ -159,6 +128,7 @@ Start-Process -FilePath 'https://github.com/adamdriscoll/sysinternals'
 
 #>
 Start-Process -FilePath 'https://www.powershellgallery.com/packages/Microsoft.PowerShell.Archive/'
+#####################################################################################
 
 <# PowerShellGet - modul pro instalaci modulů
 
@@ -170,6 +140,7 @@ Start-Process -FilePath 'https://www.powershellgallery.com/packages/Microsoft.Po
 - PSGet v3 stále neakceptuje oficiálně příspěvky komunity.
 
 #>
+#####################################################################################
 
 
 <# PowerShell rozšíření pro VS Code
@@ -192,6 +163,8 @@ Start-Process -FilePath 'https://www.powershellgallery.com/packages/Microsoft.Po
 - Zrychleno formátování kódu
 
 #>
+#####################################################################################
+
 
 <# winget - Windows Package Manager CLI (aka winget aka Choco od MS aka soumrak Chocolatey Choco od MS)
 
@@ -214,6 +187,7 @@ Start-Process -FilePath 'https://aka.ms/winget-settings'
 # Co stačí umět pro winget
 winget search 'vscode' --accept-source-agreements
 winget upgrade --all --accept-package-agreements --accept-source-agreements
+#####################################################################################
 
 <# Windows Terminál - terminál, který můžete mít opravdu rádi
 

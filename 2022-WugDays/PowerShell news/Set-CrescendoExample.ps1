@@ -1,4 +1,6 @@
-﻿$command = New-CrescendoCommand -Verb 'Get' -Noun 'IpConfig' -OriginalName 'ipconfig.exe'
+﻿Install-Module -Name Microsoft.PowerShell.Crescendo -PassThru | Import-Module
+
+$command = New-CrescendoCommand -Verb 'Get' -Noun 'IpConfig' -OriginalName 'ipconfig.exe'
 $command.Platform = 'Windows'
 $parameter = New-ParameterInfo -Name 'All' -OriginalName '-all'
 $parameter.Aliases = '-a'
