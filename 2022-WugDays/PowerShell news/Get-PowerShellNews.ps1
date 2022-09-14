@@ -25,7 +25,7 @@ Za        2 roky    o  554 více        chyb, 1686 zavřených chyb v mezidobí 
 #>
 #####################################################################################
 
-<# PS 7.2.0
+<# PS 7.2.x
 
 - LTS verze (Long-Term Support)
 - Podpora ARM64 pro Windows/macOS, ARM64 & 32 pro Debian a Ubuntu
@@ -45,7 +45,7 @@ Za        2 roky    o  554 více        chyb, 1686 zavřených chyb v mezidobí 
 
 #>
 
-<# PS 7.3.0
+<# PS 7.3.x
 
 - Většinou opravy chyb
 - Postaveno na .NET 7.0
@@ -86,7 +86,6 @@ Get-ExperimentalFeature
 Get-ChildItem
 $PSStyle.FileInfo
 #####################################################################################
-
 
 # PSReadLine - module pro našeptávání z historie zadávání
 Install-Module -Name PSReadLine -Force
