@@ -51,6 +51,27 @@ Read-Host -AsSecureString
 Start-Process -FilePath (Join-Path -Path $assetPath -ChildPath 'SecureString on macOS.png') # Nejsou ty hodnoty nějaké podezřelé?
 
 # Zkusme si udělat funkci se parametrem "Password"
+function Verb-Noun {
+    [CmdletBinding()]
+    param (
+        # Parameter help description
+        [Parameter(AttributeValues)]
+        [securestring]
+        $Password
+    )
+
+    begin {
+
+    }
+
+    process {
+        ParameterName
+    }
+
+    end {
+
+    }
+}
 
 # K čemu slouží PSCredential
 $credentials = [pscredential]::new('user', ('heslo v plaintextu' | ConvertTo-SecureString -AsPlainText -Force))
@@ -87,6 +108,7 @@ Invoke-Command -ScriptBlock $script -ArgumentList $mySecret
 + 0 Kč
 + Je multiplatformní řešení
 - Lze obejít při úspěšném ladění, ale to nelze předpokládat
+- Pro automatizaci v podstatě nepoužitelné
 #>
 #####################################################################################
 
