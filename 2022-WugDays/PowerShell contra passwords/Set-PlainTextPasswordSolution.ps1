@@ -238,11 +238,19 @@ Start-Process -FilePath 'https://github.com/Azure/azure-powershell'
 #>
 #####################################################################################
 
+# Co třeba ad hoc řešení?
+Start-Process -FilePath 'https://kutlime.visualstudio.com/'
+
+# Task scheduler umí ukládat pověření
+Start-Process -FilePath (Join-Path -Path $assetPath -ChildPath '2022-09-14-12-54-12.png')
+#####################################################################################
+
 # Co třeba komerční řešení?
 Start-Process -FilePath 'https://geekflare.com/secret-management-software/'
 Start-Process -FilePath 'https://secrethub.io/'
 
 # Závěrečné shrnutí a rady
 # Hesla jsou zlo. Nutné, ale stále zlo. Viz https://www.wug.cz/zaznamy/677-WUG-Days-2020-Svet-bez-hesel-Uz-tam-budem
+# Nikdy nezadávejte plainstring, použijte SecureString. -> Historie zadávání
 # SecretManagement by měl být základ pro uložení hesel.
-#
+# Nebuďte líní, buďte kreativní.

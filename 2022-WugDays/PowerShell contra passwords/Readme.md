@@ -15,12 +15,13 @@
 * Sdílení skriptu (v organizaci, na GitHubu)
 * Klidný spánek
 * Říci k tématu i něco jiného než hraběcí rady typu _nepoužívejte hesla v plaintextu_
+* Usnadnit sám sobě práce
 
 ## Pro koho je tato přednáška určena
 
 Seznamte se s Frantou...
 
-![](.\assets\DALLE_2022-09-13_11.31.29_system_administrator_overworked_scheduled_tasks.png)
+![Seznamte se s Frantou...](.\assets\DALLE_2022-09-13_11.31.29_system_administrator_overworked_scheduled_tasks.png)
 
 * ...Franta pracuje jako sysadmin ve veřejné zprávě/malé firmě/kolečko v korporátu,
 * o Azure slyšel jenom v televizi,
