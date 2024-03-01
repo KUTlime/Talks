@@ -330,4 +330,4 @@ $requestArgs = @{
 Invoke-WebRequest @requestArgs
 
 # Barevné znázornění
-Invoke-WebRequest -Uri 'https://excalidraw.com/#json=OOJ6YhIOySyuNVPx2qrzH,u9FtKrzq0_L6fBscHETaig'
+Start-Process -FilePath 'https://excalidraw.com/#json=OOJ6YhIOySyuNVPx2qrzH,u9FtKrzq0_L6fBscHETaig'
