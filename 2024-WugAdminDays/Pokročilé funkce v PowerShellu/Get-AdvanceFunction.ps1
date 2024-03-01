@@ -68,7 +68,9 @@ function Get-Something
     )
     begin
     {
-
+        # Můžeme provést ověření předpokladů,
+        # které nejde validovat (objekty z roury), nebo nedává smysl validovat.
+        # Begin se spouští před blokem process.
     }
     process
     {
@@ -76,7 +78,7 @@ function Get-Something
     }
     end
     {
-
+        # Většinou čistíme po sobě.
     }
 }
 
