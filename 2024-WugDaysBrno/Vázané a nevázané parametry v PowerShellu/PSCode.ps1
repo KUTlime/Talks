@@ -38,7 +38,6 @@ $scriptBlock = {
 # Pojďme si v rychlosti ukázat vazbu parametrů ve funkci.
 function Show-ParameterStatus
 {
-  [CmdletBinding()]
   param (
     [Parameter(Mandatory)]
     [string]$MandatoryParam,
@@ -149,7 +148,6 @@ Clear-Host; Trace-Command -PSHost -Name ParameterBinding -Expression {
 
 function Test-Pipeline1
 {
-  [CmdletBinding()]
   param (
     # Parametr, který přijímá hodnoty z pipeline
     [Parameter(ValueFromPipeline)]
@@ -178,10 +176,10 @@ $hashtable = @{
 }
 
 # Předání PSCustomObject
-$psCustomObject | Test-Pipeline1
+Clear-Host; $psCustomObject | Test-Pipeline1
 
 # Předání Hashtable
-$hashtable | Test-Pipeline1
+Clear-Host; $hashtable | Test-Pipeline1
 
 # Předání jednoduchého řetězce pro ValueFromPipeline
 'Simple String' | Test-Pipeline1
@@ -222,15 +220,15 @@ function Test-Pipeline2
 }
 
 # Předání PSCustomObject
-$psCustomObject | Test-Pipeline2
+Clear-Host; $psCustomObject | Test-Pipeline2
 
 # Předání Hashtable
-$hashtable | Test-Pipeline2
+Clear-Host; $hashtable | Test-Pipeline2
 
 # Předání jednoduchého řetězce pro ValueFromPipeline
 'Simple String' | Test-Pipeline2
 
-[PSCustomObject]@{
+Clear-Host; [PSCustomObject]@{
   ValueFromPipeline = 'ValueFromPipeline'
   ValueFromPipelineByPropertyName = 'ValueFromPipelineByPropertyName'
 } | Test-Pipeline2
@@ -268,12 +266,12 @@ $hashtable2 = @{
 }
 
 # Předání PSCustomObject
-$psCustomObject | Test-Pipeline3
-$psCustomObject2 | Test-Pipeline3
+Clear-Host; $psCustomObject | Test-Pipeline3
+Clear-Host; $psCustomObject2 | Test-Pipeline3
 
 # Předání Hashtable
-$hashtable | Test-Pipeline3
-$hashtable2 | Test-Pipeline3
+Clear-Host; $hashtable | Test-Pipeline3
+Clear-Host; $hashtable2 | Test-Pipeline3
 
 # Předání jednoduchého řetězce pro ValueFromPipeline
 'Simple String' | Test-Pipeline3
@@ -301,12 +299,12 @@ function Test-Pipeline4
 }
 
 # Předání PSCustomObject
-$psCustomObject | Test-Pipeline4
-$psCustomObject2 | Test-Pipeline4
+Clear-Host; $psCustomObject | Test-Pipeline4
+Clear-Host; $psCustomObject2 | Test-Pipeline4
 
 # Předání Hashtable
-$hashtable | Test-Pipeline4
-$hashtable2 | Test-Pipeline4
+Clear-Host; $hashtable | Test-Pipeline4
+Clear-Host; $hashtable2 | Test-Pipeline4
 
 # Předání jednoduchého řetězce pro ValueFromPipeline
 'Simple String' | Test-Pipeline4
@@ -333,12 +331,12 @@ function Test-Pipeline5
   }
 }
 
-@{
+Clear-Host; @{
   FirstParameter = "First parameter value"
   SecondParameter = "Second parameter value"
 } | Test-Pipeline5
 
-[PSCustomObject]@{
+Clear-Host; [PSCustomObject]@{
   FirstParameter = "First parameter value"
   SecondParameter = "Second parameter value"
 } | Test-Pipeline5
