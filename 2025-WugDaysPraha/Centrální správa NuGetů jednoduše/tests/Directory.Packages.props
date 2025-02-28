@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <ParentDirectoryPackagesProps>$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryPackagesProps>
+  </PropertyGroup>
+  <Import Project="$(ParentDirectoryPackagesProps)" Condition="Exists($(ParentDirectoryPackagesProps))" />
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
+    <PackageVersion Include="FluentAssertions" Version="7.*" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit" Version="*" />
+    <PackageVersion Include="Meziantou.Extensions.Logging.Xunit" Version="*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.*" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="*" />
+    <PackageVersion Include="Moq" Version="*" />
+    <PackageVersion Include="Respawn" Version="*" />
+    <PackageVersion Include="Testcontainers" Version="*" />
+    <PackageVersion Include="Testcontainers.MsSql" Version="*" />
+    <PackageVersion Include="xunit" Version="2.*" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
+    <PackageVersion Include="WebMotions.Fake.Authentication.JwtBearer" Version="*" />
+  </ItemGroup>
+</Project>

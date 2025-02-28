@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="*"/>
+    <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.*"/>
+    <PackageReference Include="Auth0.AuthenticationApi" Version="7.*"/>
+    <PackageReference Include="Auth0.ManagementApi" Version="7.*"/>
+    <PackageReference Include="AutoMapper" Version="12.0.*"/>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.*"/>
+    <PackageReference Include="Castle.Core" Version="5.1.1"/>
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0"/>
+    <PackageReference Include="coverlet.collector" Version="*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Dolittle.Logging" Version="5.1.0"/>
+    <PackageReference Include="FirebaseAdmin" Version="3.1.0"/>
+    <PackageReference Include="FluentAssertions" Version="6.*"/>
+    <PackageReference Include="FluentValidation" Version="11.*"/>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.*"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.*"/>
+    <PackageReference Include="Geo.MapBox" Version="1.0.0"/>
+    <PackageReference Include="GeoJSON.Net" Version="1.2.22-rc"/>
+    <PackageReference Include="Google.Apis.SecretManager.v1" Version="1.65.0.3270"/>
+    <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore3" Version="5.1.0"/>
+    <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.9.1"/>
+    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="2.1.0"/>
+    <PackageReference Include="Google.Cloud.Scheduler.V1" Version="3.2.0"/>
+    <PackageReference Include="LinqKit" Version="1.*"/>
+    <PackageReference Include="Mediator.SourceGenerator" Version="*"/>
+    <PackageReference Include="Mediator.Abstractions" Version="*"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.*"/>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.*"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.*"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.*"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.*"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.*"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.*"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*"/>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.*"/>
+    <PackageReference Include="Moq" Version="4.*"/>
+    <PackageReference Include="NetTopologySuite" Version="2.5.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.*"/>
+    <PackageReference Include="Npgsql" Version="*"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="*"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="*"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="*"/>
+    <PackageReference Include="NSwag.AspNetCore" Version="*"/>
+    <PackageReference Include="NSwag.MSBuild" Version="*"/>
+    <PackageReference Include="PublicApiGenerator" Version="*"/>
+    <PackageReference Include="RestSharp" Version="*"/>
+    <PackageReference Include="Serilog.AspNetCore" Version="*"/>
+    <PackageReference Include="Stripe.net" Version="39.125.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="*"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="*"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="*"/>
+    <PackageReference Include="Twilio" Version="6.15.*"/>
+    <PackageReference Include="Verify.Xunit" Version="*"/>
+    <PackageReference Include="WebMotions.Fake.Authentication.JwtBearer" Version="*"/>
+    <PackageReference Include="xunit" Version="2.*"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

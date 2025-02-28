@@ -1,4 +1,4 @@
-﻿$slideNames = 'ps-basics'
+﻿$slideNames = 'dockerfile'
 
 $arguments = @{
     FilePath = 'docker'

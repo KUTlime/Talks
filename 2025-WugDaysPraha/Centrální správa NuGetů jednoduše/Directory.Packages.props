@@ -1,0 +1,92 @@
+﻿<Project>
+  <PropertyGroup>
+    <ParentDirectoryPackagesProps>$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryPackagesProps>
+  </PropertyGroup>
+  <Import Project="$(ParentDirectoryPackagesProps)" Condition="Exists($(ParentDirectoryPackagesProps))"/>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    <!--https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management#transitive-pinning-->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">
+    <GlobalPackageReference Include="StyleCop.Analyzers" Version="*-*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </GlobalPackageReference>
+    <GlobalPackageReference Include="MoveToGlobalUsingsAnalyzer" Version="*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </GlobalPackageReference>
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </GlobalPackageReference>
+    <GlobalPackageReference Include="CSharpGuidelinesAnalyzer" Version="*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </GlobalPackageReference>
+    <PackageVersion Include="Ardalis.GuardClauses" Version="*"/>
+    <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.*"/>
+    <PackageVersion Include="Azure.Identity" Version="1.*"/>
+    <PackageVersion Include="FastEndpoints" Version="*"/>
+    <PackageVersion Include="FastEndpoints.Swagger" Version="*"/>
+    <PackageVersion Include="FluentValidation.AspNetCore" Version="*"/>
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="*"/>
+    <PackageVersion Include="JetBrains.Annotations" Version="*"/>
+    <PackageVersion Include="Mediator.Abstractions" Version="*"/>
+    <PackageVersion Include="Mediator.SourceGenerator" Version="*"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.*"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.*"/>
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.*"/>
+    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.*"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="9.*"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.*"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.*"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.*"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.*"/>
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.*"/>
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.*"/>
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.*"/>
+    <PackageVersion Include="NetArchTest.eNhancedEdition" Version="1.*"/>
+    <PackageVersion Include="NSwag.AspNetCore" Version="*"/>
+    <PackageVersion Include="NSwag.MSBuild" Version="*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="PublicApiGenerator" Version="*"/>
+    <PackageVersion Include="OneOf" Version="*"/>
+    <PackageVersion Include="OneOf.SourceGenerator" Version="*"/>
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="*"/>
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="*"/>
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="*"/>
+    <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="*-*"/>
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="*"/>
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="*"/>
+    <PackageVersion Include="Riok.Mapperly" Version="*"/>
+    <PackageVersion Include="Serilog" Version="*"/>
+    <PackageVersion Include="Serilog.AspNetCore" Version="*"/>
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="*"/>
+    <PackageVersion Include="Serilog.Enrichers.AspnetcoreHttpcontext" Version="*"/>
+    <PackageVersion Include="Serilog.Enrichers.Environment" Version="*"/>
+    <PackageVersion Include="Serilog.Enrichers.Process" Version="*"/>
+    <PackageVersion Include="Serilog.Enrichers.Thread" Version="*"/>
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="*"/>
+    <PackageVersion Include="Serilog.Sinks.Async" Version="*"/>
+    <PackageVersion Include="Serilog.Sinks.Console" Version="*"/>
+    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="*"/>
+    <PackageVersion Include="Verify.DiffPlex" Version="*"/>
+    <PackageVersion Include="Verify.Xunit" Version="*"/>
+    <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.*"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Http" Version="*"/>
+    <PackageVersion Include="Blazor.Bootstrap" Version="*"/>
+  </ItemGroup>
+</Project>
