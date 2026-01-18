@@ -350,6 +350,21 @@ catch
 # Jak zpracovat výjimku?
 # Např. chci zapsat do souboru a BUM... Už víme, co se stane, ale co s tím?
 # Jaké máme možnosti pro tento konkrétní případ?
+<#
+
+#>
+# Nucený zápis do souboru s přepsáním existujícího souboru přes -Force
+New-Item -Path 'Smazat.txt' -ItemType File -Force
+
+# Vygenerování unikátní cesty pro nový soubor s pomocí GUID
+$uniqueFilePath = Join-Path -Path $env:TEMP -ChildPath ("Log_{0}.txt" -f [guid]::NewGuid().ToString())
+
+# Při problémech se zápisem přes síť můžeme
+# - Zkusit znovu po krátké pauze (retry logic) a zkusit N pokusů.
+# - Použít algoritmus exponenciálního backoffu pro zpoždění mezi pokusy.
+# - V případě selhání primárního DNS, použít alternativní DNS.
+# - V případě selhání DHCP, přepnout na statickou IP adresu pro dočasný přístup k síti, pokud je známa.
+# - Připravím si alternativní poskytovatele služeb (redundance), která je sakra drahá na údržbu i vývoj.
 
 # Co když si výjimkou nevím rady?
 # Takovou výjimku necháváme být.
