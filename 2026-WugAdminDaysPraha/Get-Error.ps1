@@ -27,6 +27,7 @@ Diskuze a dotazy (10-15 minut)
 - Shrnutí klíčových bodů
 #>
 
+#------------------------------------------------------------------
 # Význam chyb v PowerShellu
 # - Chyby jako signál jak skript vlastně (ne)dopadl.
 # - Chyby jako signály pro zlepšení skriptů.
@@ -42,6 +43,7 @@ Write-Host 'Tento řádek se stále vykoná.'
 # Zobrazení poslední chyby
 Write-Host "Poslední chyba: $($Error[0])"
 
+#------------------------------------------------------------------
 # Význam proudů v PowerShellu
 # PowerShell má několik proudů: Výstup, Chyby, Varování, Informace, Debug.
 # Proudy jsou klíčové pro pochopení, jak PowerShell zpracovává chyby.
@@ -115,6 +117,7 @@ Get-Content -Path 'C:\NeexistujiciSoubor.txt' 2> 'C:\ChybovyLog.txt'¨
 
 # Za mne je tento zápis nesrozumitelný a nešťastný.
 
+#------------------------------------------------------------------
 # Terminální vs. neterminální chyby
 # Terminální chyby: Zastaví provádění skriptu okamžitě. Používá se pro kritické chyby.
 # Neterminální chyby: Zaznamenají chybu, ale skript pokračuje. Výchozí chování.
@@ -125,21 +128,30 @@ Get-Content -Path 'C:\NeexistujiciSoubor.txt' -ErrorAction:Continue  # Netermin�
 Write-Host 'Tento řádek se vykoná i po chybě.'
 
 # Příklad terminální chyby (skript se zastaví):
-# Throw "Kritická chyba!"  # Tento řádek by zastavil skript, pokud by nebyl zakomentovaný
+throw 'Kritická chyba!'  # Tento řádek by zastavil skript.
 
 # Použití Write-Error s -ErrorAction Stop pro terminální chybu:
-# Write-Error "Chyba" -ErrorAction Stop  # Zastaví skript
+Write-Error 'Chyba' -ErrorAction:Stop  # Zastaví skript
 
 # Rozdíl v ErrorAction:
 # - Continue: Neterminální, pokračuje
 # - Stop: Terminální, zastaví
-# - SilentlyContinue: Neterminální, bez výpisu chyby
+# - SilentlyContinue: Neterminální, bez výpisu chyby, zápis do $Error
+# - Inquire: Terminální, vyzve uživatele k rozhodnutí
+# - Ignore: Neterminální, chyba je ignorována (nezapíše se ani do $Error)
 
 # Rozdíl mezi výjimkou a chybou:
 # - Výjimka je objekt, který obsahuje informace o chybě a jejím kontextu.
 # - Výjimka bez zachycení vede k přerušení skriptu (terminální chyba).
 
+# Kdy PowerShell vyvolá terminální chybu?
+# - Když je ErrorActionPreference nastaven na 'Stop'.
+# - Když je použito 'throw' pro vyvolání výjimky, která není zachycena.
+# - Když je použito Write-Error s -ErrorAction Stop.
+# - Při validaci vstupních parametrů v pokročilých funkcích.
+# - Při chybějícím povinném parametru v pokročilých funkcích.
 
+# ------------------------------------------------------------------
 # Jak PowerShell identifikuje chyby
 
 # PowerShell identifikuje chyby pomocí objektů ErrorRecord.
@@ -165,6 +177,7 @@ Write-Host "Category: $($lastError.CategoryInfo.Category)"
 # PowerShell používá ErrorRecord pro konzistentní zpracování chyb napříč cmdlety a skripty.
 # To umožňuje pokročilé zpracování, jako filtrování nebo logování specifických typů chyb.
 
+# ------------------------------------------------------------------
 # Lokální chování chyb pomocí Common Parameters
 
 # Mnoho cmdletů v PowerShellu podporuje parametry pro řízení chování chyb.
@@ -189,9 +202,11 @@ $someVar | ForEach-Object { Write-Host "Chyby zachycené v proměnné someVar: $
 # Skript je soubor s příkazy PowerShellu, který může, ale nemusí podporovat Common Parameters.
 
 # Příklad "pokročilé funkce", která je cmdlet, ale nepodporuje Common Parameters
-function Get-SampleOne {
+function Get-SampleOne
+{
     param () <# Chybí [CmdletBinding()], prázdný param je k ničemu.#>
-    process {
+    process
+    {
         Write-Host 'Test'
     }
 }
@@ -199,10 +214,13 @@ function Get-SampleOne {
 Get-Help 'Get-SampleOne'
 
 # Příklad "pokročilé funkce", která není cmdlet a podporuje Common Parameters
-function Get-SampleTwo {
+#(která ale nedává moc smysl)
+function Get-SampleTwo
+{
     [CmdletBinding()]
     param ()
-    process {
+    process
+    {
         Write-Verbose 'Test'
     }
 }
@@ -210,13 +228,15 @@ function Get-SampleTwo {
 Get-Help 'Get-SampleTwo'
 
 # Příklad "pokročilé funkce", která je cmdlet a podporuje Common Parameters
-function Get-SampleThree {
+function Get-SampleThree
+{
     param (
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]
         $Input
     )
-    process {
+    process
+    {
         Write-Host $Input
     }
 }
@@ -227,26 +247,39 @@ Get-Help 'Get-SampleThree'
 # Příklad skriptu s Common Parameters
 Get-ChildItem -File -Recurse -Filter 'Test-Param.ps1' | ForEach-Object {
     Start-Process -FilePath pwsh.exe -ArgumentList @(
-        "-NoProfile",
-        "-NoLogo",
-        "-File",
+        '-NoProfile',
+        '-NoLogo',
+        '-File',
         "$($_.FullName) -InputValue ""Testovací hodnota""-Verbose -InformationAction:Continue"
     ) -NoNewWindow -Wait
 }
+
+# Blok kódu v rámci skriptu
+# Můžeme také použít blok kódu s Common Parameters
+& {
+    param (
+        [Parameter(Mandatory)] <# Přítomnost tohoto atributu nám reálně způsobí, že Common Parameters budou podporovány. #>
+        [string]$InputValue
+    )
+    Write-Host "Vstupní hodnota: $InputValue"
+    Write-Information "Zpracovávám informaci: $InputValue"
+    Write-Verbose "Zpracovávám verbose: $InputValue"
+} -InputValue 'Hodnota pro blok kódu' -Verbose -InformationAction:Continue
 
 # Chování chyb je taky možné měnit globálně pro konkrétní příkazy pomocí $PSDefaultParameterValues
 # Nastavení globálních výchozích hodnot pro parametry Common Parameters
 $PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
 
 $PSDefaultParameterValues = @{
-  'Send-MailMessage:SmtpServer' = 'Server123'
-  'Get-WinEvent:LogName' = 'Microsoft-Windows-PrintService/Operational'
-  'Get-*:Verbose' = $true
+    'Send-MailMessage:SmtpServer' = 'Server123'
+    'Get-WinEvent:LogName'        = 'Microsoft-Windows-PrintService/Operational'
+    'Get-*:Verbose'               = $true
 }
 
 # Příklad: Nastavení globálního ErrorAction pro Get-ChildItem na SilentlyContinue v rámci celé relace PowerShellu nebo skriptu
 $PSDefaultParameterValues['Get-ChildItem:ErrorAction'] = 'SilentlyContinue'
 
+# ------------------------------------------------------------------
 # Výjimky
 # Základní konstrukce se skládá z těchto tří částí:
 try {} catch {} finally {}
@@ -350,14 +383,12 @@ catch
 # Jak zpracovat výjimku?
 # Např. chci zapsat do souboru a BUM... Už víme, co se stane, ale co s tím?
 # Jaké máme možnosti pro tento konkrétní případ?
-<#
 
-#>
 # Nucený zápis do souboru s přepsáním existujícího souboru přes -Force
 New-Item -Path 'Smazat.txt' -ItemType File -Force
 
 # Vygenerování unikátní cesty pro nový soubor s pomocí GUID
-$uniqueFilePath = Join-Path -Path $env:TEMP -ChildPath ("Log_{0}.txt" -f [guid]::NewGuid().ToString())
+$uniqueFilePath = Join-Path -Path $env:TEMP -ChildPath ('Log_{0}.txt' -f [guid]::NewGuid().ToString())
 
 # Při problémech se zápisem přes síť můžeme
 # - Zkusit znovu po krátké pauze (retry logic) a zkusit N pokusů.
@@ -365,6 +396,74 @@ $uniqueFilePath = Join-Path -Path $env:TEMP -ChildPath ("Log_{0}.txt" -f [guid]:
 # - V případě selhání primárního DNS, použít alternativní DNS.
 # - V případě selhání DHCP, přepnout na statickou IP adresu pro dočasný přístup k síti, pokud je známa.
 # - Připravím si alternativní poskytovatele služeb (redundance), která je sakra drahá na údržbu i vývoj.
+
+# Retry Logic s exponenciálním backoffem pro síťové volání
+function Invoke-WithRetry
+{
+    param (
+        [scriptblock]$ScriptBlock,
+        [int]$MaxRetries = 3,
+        [int]$InitialDelay = 1
+    )
+
+    $attempt = 0
+    $delay = $InitialDelay
+
+    while ($attempt -lt $MaxRetries)
+    {
+        try
+        {
+            & $ScriptBlock
+            return
+        }
+        catch
+        {
+            $attempt++
+            if ($attempt -ge $MaxRetries)
+            {
+                throw
+            }
+            Write-Warning "Pokus $attempt selhal. Opakuji za $delay sekund..."
+            Start-Sleep -Seconds $delay
+            $delay *= 2  # Exponenciální backoff
+        }
+    }
+}
+
+# Příklad použití pro stažení souboru
+Invoke-WithRetry -ScriptBlock {
+    Invoke-WebRequest -Uri 'https://example.com/file.zip' -OutFile 'file.zip'
+} -MaxRetries 5
+
+# Fallback na alternativní zdroj dat
+function Get-DataWithFallback
+{
+    param (
+        [string]$PrimarySource,
+        [string]$FallbackSource
+    )
+
+    try
+    {
+        # Zkus primární zdroj
+        Get-Content -Path $PrimarySource
+    }
+    catch
+    {
+        Write-Warning "Primární zdroj $PrimarySource není dostupný. Používám fallback $FallbackSource."
+        try
+        {
+            Get-Content -Path $FallbackSource
+        }
+        catch
+        {
+            throw 'Ani fallback zdroj není dostupný.'
+        }
+    }
+}
+
+# Příklad
+Get-DataWithFallback -PrimarySource 'C:\Data\primary.txt' -FallbackSource 'C:\Data\backup.txt'
 
 # Co když si výjimkou nevím rady?
 # Takovou výjimku necháváme být.
