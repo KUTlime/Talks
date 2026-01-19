@@ -64,13 +64,13 @@ Clear-Host; Write-Debug 'Zpráva' # Zapíše se debug hlášení do konzole, dos
 # Nastavení preferencí pro jednotlivé proudy
 
 # Chybový proud (Error Stream) - ErrorActionPreference
-$ErrorActionPreference
+Clear-Host; $ErrorActionPreference
 
 # Varovný proud (Warning Stream) - WarningPreference
-$WarningPreference
+Clear-Host; $WarningPreference
 
 # Informační proud (Information Stream) - InformationPreference
-$InformationPreference
+Clear-Host; $InformationPreference
 
 # Verbose proud (Verbose Stream) - VerbosePreference
 $VerbosePreference
@@ -80,7 +80,7 @@ $DebugPreference
 
 # Co je to ActionPreference?
 # ActionPreference je enumerace, která definuje možné hodnoty pro nastavení chování
-$VerbosePreference.GetType().FullName
+Clear-Host; $VerbosePreference.GetType().FullName
 
 # Nastavení preferencí pro jednotlivé proudy buď pomocí stringu
 $ErrorActionPreference = 'Stop'
@@ -129,6 +129,7 @@ Write-Host 'Tento řádek se vykoná i po chybě.'
 
 # Příklad terminální chyby (skript se zastaví):
 throw 'Kritická chyba!'  # Tento řádek by zastavil skript.
+Write-Host 'Tento řádek se nevykoná.'
 
 # Použití Write-Error s -ErrorAction Stop pro terminální chybu:
 Write-Error 'Chyba' -ErrorAction:Stop  # Zastaví skript
